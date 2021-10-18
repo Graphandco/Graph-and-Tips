@@ -1,12 +1,14 @@
 import { React, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
-export const Login = ({ isLogged, setIsLogged, user, setUser }) => {
+import { auth } from '../services/firebase-config';
+
+export const Login = ({ user, setUser }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const auth = getAuth();
+  //const auth = getAuth();
   let history = useHistory();
 
   const clearForm = () => {
@@ -18,25 +20,18 @@ export const Login = ({ isLogged, setIsLogged, user, setUser }) => {
     history.push('/');
   };
 
-  const login = () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const userData = userCredential.user;
-        setUser(userData);
-        //console.log(user);
-        // ...
-        setIsLogged(true);
-        redirect();
-      })
-      .catch((error) => {
-        console.log('Erreur lors de la connexion');
-      });
+  const login = async () => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      redirect();
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
     <div className="login form-wrapper">
-      <div className="logged">{isLogged ? 'OUI' : 'NON'}</div>
+      <div className="logged">{user?.email}</div>
       <div className="form-top">S'identifier</div>
       <form>
         <div className="form-body">

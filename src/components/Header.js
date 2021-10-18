@@ -5,7 +5,7 @@ import Gravatar from 'react-gravatar';
 import { getAuth, signOut } from 'firebase/auth';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
-export const Header = ({ user, setUser, isLogged }) => {
+export const Header = ({ user, setUser }) => {
   const [authChange, setAuthChange] = useState(false);
 
   const logout = () => {
@@ -28,7 +28,7 @@ export const Header = ({ user, setUser, isLogged }) => {
         </div>
 
         <div className="user" onClick={() => setAuthChange(!authChange)}>
-          <Gravatar email={isLogged ? user.email : 'blahblah@blah.com'} size={30} default="mp" />
+          <Gravatar email={user ? user.email : 'blahblah@blah.com'} size={30} default="mp" />
           <div className="chevron">{authChange ? <FaChevronUp /> : <FaChevronDown />}</div>
           <div className={`${authChange ? 'change-auth open ' : 'change-auth'}`}>
             {user ? (
